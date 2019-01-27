@@ -1,15 +1,13 @@
 import React, { Component } from 'react'
-import firebase from '../Firebase/firebase'
-import Context from './Context'
+import firebase from '../FirebaseModel/firebase'
 
-export class ContextProvider extends Component {
-  constructor() {
-    super()
+export const FirestoreContext = React.createContext()
+
+export class FirestoreContextWrapper extends Component {
+  constructor(props) {
+    super(props)
     this.state = {
-      blogs: [
-        { id: 1, name: 1, content: 'blah' },
-        { id: 2, name: 2, content: 'blah, blah' }
-      ],
+      data: [],
       tempBlog: ''
     }
   }
@@ -25,34 +23,37 @@ export class ContextProvider extends Component {
     }
     this.addBlogToFireStore(newBlog)
     this.setState({
-      blogs: [...this.state.blogs, newBlog],
+      data: [...this.state.data, newBlog],
       tempBlog: ''
     })
   }
 
-  getBlogFromFireStore = () => {
+  getItemFromDatabase = () => {
     return firebase
       .firestore()
-      .collection('blogs')
+      .collection(this.props.collection)
       .get()
   }
 
   prepareIncomingBlogForAddingToState = doc => {
     const newObj = {
       id: doc.id,
-      name: doc.data().name,
-      content: doc.data().content
+      title: doc.data().title,
+      time: doc.data().time,
+      summary: doc.data().summary,
+      date: doc.data().date,
+      author: doc.data().author
     }
-    this.setState({ blogs: [...this.state.blogs, newObj] })
+    this.setState({ data: [...this.state.data, newObj] })
   }
 
   addBlogToFireStore = blog => {
-    let collection = firebase.firestore().collection('blogs')
+    let collection = firebase.firestore().collection(this.props.collection)
     return collection.add(blog)
   }
 
   componentDidMount() {
-    this.getBlogFromFireStore().then(snapshot => {
+    this.getItemFromDatabase().then(snapshot => {
       snapshot.docs.map(doc => this.prepareIncomingBlogForAddingToState(doc))
     })
   }
@@ -61,20 +62,18 @@ export class ContextProvider extends Component {
 
   render() {
     return (
-      <Context.Provider
+      <FirestoreContext.Provider
         value={{
-          blogs: this.state.blogs,
+          data: this.state.data,
           handleChange: this.handleChange,
           onSubmit: this.onSubmit,
-          getBlogFromFireStore: this.getBlogFromFireStore,
+          getItemFromDatabase: this.getItemFromDatabase,
           addBlogToFireStore: this.addBlogToFireStore,
           callAll: this.callAll
         }}
       >
         {this.props.children}
-      </Context.Provider>
+      </FirestoreContext.Provider>
     )
   }
 }
-
-export default ContextProvider

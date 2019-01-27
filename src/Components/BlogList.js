@@ -1,14 +1,23 @@
 import React from 'react'
-import Context from '../Store/Context/Context'
-import BlogItem from './BlogItem'
+import { FirestoreContext } from '../Store/FirestoreContext/FirestoreContextWrapper'
+import BlogSummary from './BlogSummary'
 
 const BlogList = () => {
   return (
-    <Context.Consumer>
-      {({ blogs }) => {
-        return blogs && blogs.map(blog => <BlogItem blog={blog} />)
-      }}
-    </Context.Consumer>
+    <div className="list-container">
+      <FirestoreContext.Consumer>
+        {({ data }) => {
+          return (
+            data &&
+            data.map(blog => (
+              <div key={blog.id}>
+                <BlogSummary blog={blog} />
+              </div>
+            ))
+          )
+        }}
+      </FirestoreContext.Consumer>
+    </div>
   )
 }
 
