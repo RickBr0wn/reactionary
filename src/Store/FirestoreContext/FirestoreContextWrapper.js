@@ -42,7 +42,8 @@ export class FirestoreContextWrapper extends Component {
       time: doc.data().time,
       summary: doc.data().summary,
       date: doc.data().date,
-      author: doc.data().author
+      author: doc.data().author,
+      blog: doc.data().blog
     }
     this.setState({ data: [...this.state.data, newObj] })
   }

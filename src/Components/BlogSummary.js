@@ -1,21 +1,20 @@
 import React from 'react'
 
-const BlogSummary = ({blog}) => {
-  console.log({blog})
+const BlogSummary = ({ blog: { title, time, author, date, summary } }) => {
   return (
     <div className="blog-summary">
-      <h1>{blog.title}</h1>
+      <h1>{title}</h1>
       <div className="container">
-        <p className="small">Originally written by {blog.author}</p>
+        <p className="small">Originally written by {author}</p>
         <p className="small">
           <i className="far fa-clock" />
-          {blog.time}
+          {time}
         </p>
       </div>
-      <p className="small">{Date(blog.date)}</p>
+      <p className="small">{Date(date)}</p>
       <br />
       <br />
-      <p>{blog.summary}</p>
+      <p>{summary}</p>
     </div>
   )
 }

@@ -7,16 +7,17 @@ const BlogDetail = props => {
   return (
     <div>
       <FirestoreContext.Consumer>
-        {contextValue => {
+        {({ data }) => {
           const id = props.match.params.id
           let selectedBlog = null
 
-          contextValue.data.map(blogObj =>
-            blogObj.id === id ? (selectedBlog = blogObj) : null
+          data.map(blog =>
+            blog.id === id ? (selectedBlog = blog) : null
           )
 
           if (selectedBlog) {
             const { title, author, time, date, blog } = selectedBlog
+            console.log(blog);
             return (
               <DarkModeContext.Consumer>
                 {({ on, toggle }) => {
