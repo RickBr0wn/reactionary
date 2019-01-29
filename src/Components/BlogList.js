@@ -8,26 +8,11 @@ const BlogList = () => {
     <div className="list-container">
       <FirestoreContext.Consumer>
         {({ data }) => {
-          console.log(data)
           return (
             data &&
             data.map(blog => (
               <Link to={'/' + blog.id} key={blog.id}>
-                <div className="blog-summary">
-                  <h1>{blog.title}</h1>
-                  <div className="container">
-                    <p className="small">Originally written by {blog.author}</p>
-                    <p className="small">
-                      <i className="far fa-clock" />
-                      {blog.time}
-                    </p>
-                  </div>
-                  <p className="small">{Date(blog.date)}</p>
-                  <br />
-                  <br />
-                  <br />
-                  <p>{blog.summary}</p>
-                </div>
+                <BlogSummary blog={blog} />                
               </Link>
             ))
           )

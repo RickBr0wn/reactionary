@@ -1,22 +1,55 @@
 import React from 'react'
+import { FirestoreContext } from '../Store/FirestoreContext/FirestoreContextWrapper'
+import { DarkModeContext } from '../Store/DarkMode/DarkModeWrapper'
+import ToggleSwitch from './ToggleSwitch'
 
-const BlogDetail = (props) => {
-  console.log(props)
+const BlogDetail = props => {
   return (
     <div>
-      <h1>{}</h1>
-      <div className="container">
-        <p className="small">Originally written by {}</p>
-        <p className="small">
-          <i className="far fa-clock" />
-          {}
-        </p>
-      </div>
-      <p className="small">{Date()}</p>
-      <br />
-      <br />
-      <br />
-      <p>{}</p>
+      <FirestoreContext.Consumer>
+        {contextValue => {
+          const id = props.match.params.id
+          let selectedBlog = null
+
+          contextValue.data.map(blogObj =>
+            blogObj.id === id ? (selectedBlog = blogObj) : null
+          )
+
+          if (selectedBlog) {
+            const { title, author, time, date, blog } = selectedBlog
+            return (
+              <DarkModeContext.Consumer>
+                {({ on, toggle }) => {
+                  return (
+                    <div className="app">
+                      <div className="header">
+                        <h1>Reactionary</h1>
+                        <ToggleSwitch on={on} toggle={toggle} />
+                      </div>
+                      <div className="container details">
+                        <h1>{title}</h1>
+                        <p className="small">Originally written by {author}</p>
+                        <p className="small">
+                          <i className="far fa-clock" />
+                          {time}
+                        </p>
+                      </div>
+                      <p className="small">{Date(date)}</p>
+                      <br />
+                      <br />
+                      <br />
+                      <p>{blog}</p>
+                    </div>
+                  )
+                }}
+              </DarkModeContext.Consumer>
+            )
+          } else {
+            // TODO: spinner to go here
+            return <h1>loading!</h1>
+          }
+        }}
+      </FirestoreContext.Consumer>
     </div>
   )
 }

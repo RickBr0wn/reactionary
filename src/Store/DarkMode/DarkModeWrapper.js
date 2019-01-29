@@ -6,24 +6,25 @@ export class DarkModeWrapper extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      on: false
+      on: true
     }
   }
 
   dark = () => ({
     background: '#333333',
-    color: '#f7f7f7'
+    color: '#f7f7f7',
+    transition: 'all .1s'
   })
 
   light = () => ({
     background: '#f7f7f7',
-    color: '#333333'
+    color: '#333333',
+    transition: 'all .1s'
   })
 
   toggle = () => this.setState(prevState => ({ on: !prevState.on }))
 
   render() {
-    
     return (
       <DarkModeContext.Provider
         value={{

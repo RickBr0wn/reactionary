@@ -13,14 +13,10 @@ const App = () => {
       <CssReset>
         <FirestoreContextWrapper collection={'blogs'}>
           <BrowserRouter>
-            <div>
-              <Switch>
-                <Route exact path="/" component={HomePage} />
-              </Switch>
-              <Switch>
-                <Route path="/:id" component={BlogDetail} />
-              </Switch>
-            </div>
+            <>
+              <Route exact path="/" component={HomePage} />
+              <Route path="/:id" component={BlogDetail} />
+            </>
           </BrowserRouter>
         </FirestoreContextWrapper>
       </CssReset>
@@ -29,15 +25,3 @@ const App = () => {
 }
 
 export default App
-
-//   < DarkModeContext.Consumer >
-//   {({ on, toggle }) => {
-//   return (
-//     <div className="app">
-//       <Header on={on} toggle={toggle} />
-//       <AboutMe />
-//       <BlogList />
-//     </div>
-//   )
-// }}
-//           </DarkModeContext.Consumer >
